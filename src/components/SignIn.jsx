@@ -4,6 +4,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Formik } from 'formik';
 import theme from '../theme';
 import * as yup from 'yup';
+import useSignIn from '../hooks/useSignIn';
+import { useNavigate } from 'react-router-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,8 +34,8 @@ const styles = StyleSheet.create({
 })
 
 const initialValues = {
-  username: '',
-  password: ''
+  username: 'kalle',
+  password: 'password'
 }
 
 const validationSchema = yup.object().shape({
@@ -44,7 +46,7 @@ const validationSchema = yup.object().shape({
 const SignInForm = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
-      <FormikTextInput style={styles.textInput}  name='username' placeholder='Username' />
+      <FormikTextInput style={styles.textInput} name='username' placeholder='Username' />
       <FormikTextInput style={styles.textInput} name='password' placeholder='Password' secureTextEntry />
       <Pressable onPress={onSubmit}>
         <Text style={styles.signInBtn}>Sign in</Text>
@@ -54,8 +56,19 @@ const SignInForm = ({ onSubmit }) => {
 }
 
 const SignIn = () => {
-  const onSubmit = values => {
-    console.log(values);
+  const [signIn] = useSignIn();
+  let navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      console.log({ data });
+      navigate('/');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
