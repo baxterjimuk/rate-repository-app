@@ -4,11 +4,15 @@ import Text from "./Text";
 
 const AppBarTab = ({ text, path, onPress }) => {
     return <View style={{ padding: 5 }}>
-        <Pressable onPress={onPress}>
+        {path ? (
             <Link to={path}>
                 <Text fontWeight="bold" fontSize="subheading" color="white">{text}</Text>
             </Link>
-        </Pressable>
+        ) : (
+            <Pressable onPress={onPress}>
+                <Text fontWeight="bold" fontSize="subheading" color="white">{text}</Text>
+            </Pressable>
+        )}
     </View>
 }
 

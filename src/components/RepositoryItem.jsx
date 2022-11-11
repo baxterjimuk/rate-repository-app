@@ -1,6 +1,7 @@
-import { Image, StyleSheet, View } from "react-native"
+import { Image, StyleSheet, View, Pressable, Linking } from "react-native"
 import theme from "../theme"
 import Text from "./Text"
+import { useParams } from "react-router-native"
 
 const styles = StyleSheet.create({
   container: {
@@ -33,6 +34,16 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 5
+  },
+  gitHubBtn: {
+    backgroundColor: theme.colors.primary,
+    color: 'white',
+    flexGrow: 0,
+    borderRadius: 2,
+    textAlign: 'center',
+    padding: 10,
+    margin: 5,
+    fontWeight: 'bold'
   }
 })
 
@@ -52,8 +63,9 @@ const CountDisplay = ({ count, unit }) => {
 }
 
 const RepositoryItem = ({ item }) => {
+  const { id } = useParams();
   return (
-    <View style={styles.container}>
+    <View testID="repositoryItem" style={styles.container}>
       <View style={styles.flex1}>
         <View style={{ flex: 1, padding: 5 }}>
           <Image style={styles.logo} source={{ uri: item.ownerAvatarUrl }} />
@@ -70,6 +82,9 @@ const RepositoryItem = ({ item }) => {
         <CountDisplay count={item.reviewCount} unit='Reviews' />
         <CountDisplay count={item.ratingAverage} unit='Rating' />
       </View>
+      {id && <Pressable onPress={() => Linking.openURL(item.url)}>
+        <Text style={styles.gitHubBtn}>Open in GitHub</Text>
+      </Pressable>}
     </View>
   )
 }
